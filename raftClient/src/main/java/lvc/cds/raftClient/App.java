@@ -3,15 +3,45 @@
  */
 package lvc.cds.raftClient;
 
+import java.util.Scanner;
+
 public class App {
     public static void main(String[] args) {
-        String raftLeader = "1.1.1.1";
-        int raftLeaderPort = 9876;
+        String raftLeader = "10.1.81.22";
+        int raftLeaderPort = 9321;
+
+        Scanner scanner = new Scanner(System.in);
 
         RaftStub rStub = new RaftStub(raftLeader, raftLeaderPort);
 
-        // present a menu. Allow user to send messages to leader. add a way to change
-        // the leader, for testing.
-        rStub.sendClientMessage("DEL Bubba");
+        if (rStub != null) {
+            System.out.println("connected to raft leader " + raftLeader);
+        }
+        while (true) {
+            String verb = "";
+            String key = "";
+            String value = "";
+            String message = "";
+            System.out.println("Enter ADD to add a new key value or DEL to delete a key value pair. Enter QUIT to leave.");
+            verb = scanner.nextLine();
+            if (verb.equals("ADD")) {
+                System.out.println("Enter the key to be added");
+                key = scanner.nextLine();
+                System.out.println("Enter the value associated with " + key);
+                value = scanner.nextLine();
+                message = verb + " " + key + " " + value;
+                rStub.sendClientMessage(message);
+            }
+            else if (verb.equals("DEL")) {
+                System.out.println("Enter the key to be deleted");
+                key = scanner.nextLine();
+                message = verb + " " + key;
+                rStub.sendClientMessage(message);
+            } else if(verb.equals("QUIT")) {
+                break;
+            }
+            else System.out.println("Not a valid verb.");
+        }
+        scanner.close();
     }
 }

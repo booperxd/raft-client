@@ -23,6 +23,7 @@ public class RaftStub {
         this.port = port;
         this.channel = null;
         this.stub = null;
+        connect();
     }
 
     void connect() {
@@ -61,10 +62,6 @@ public class RaftStub {
             }
         });
 
-
-    }
-
-    void sendRequestVote() {
 
     }
 }
